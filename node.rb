@@ -27,8 +27,6 @@ class Node
       @right
     elsif !@left.nil? && @right.nil?
       @left
-    else
-      nil
     end
   end
 

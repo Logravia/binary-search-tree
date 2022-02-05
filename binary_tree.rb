@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'pry-byebug'
 require_relative 'node'
+require 'pry-byebug'
 
 class Tree
   def initialize(arr = [])
@@ -39,27 +39,25 @@ class Tree
         cur_node = cur_node.right
       end
 
-      if cur_node.nil?
-       if new_node < prev_node
-         prev_node.left = new_node
-         break
-       else
-         prev_node.right = new_node
-         break
-       end
-      end
-    end
+      next unless cur_node.nil?
 
+      if new_node < prev_node
+        prev_node.left = new_node
+      else
+        prev_node.right = new_node
+      end
+      break
+    end
   end
 
   def find_node(val)
-
     prev_node = @root
     cur_node = @root
     val = Node.new(val)
 
     until cur_node.leaf?
       return cur_node, prev_node if cur_node == val
+
       if val < cur_node
         prev_node = cur_node
         cur_node = cur_node.left
@@ -69,22 +67,19 @@ class Tree
       end
     end
 
-    if cur_node == val
-      return cur_node, prev_node
-    else
-      nil
-    end
+    [cur_node, prev_node] if cur_node == val
   end
 
   def min_largest(root)
     return nil if root.right.nil?
+
     prev_node = root
     cur_node = root.right
     until cur_node.leaf?
       prev_node = cur_node
       cur_node = cur_node.left
     end
-    return prev_node, cur_node
+    [prev_node, cur_node]
   end
 
   def remove_node(to_remove, prev_node)
@@ -105,41 +100,44 @@ class Tree
   def remove(val)
     to_remove, parent = find_node(val)
     return nil if to_remove.nil?
+
     remove_node(to_remove, parent)
     to_remove
   end
 
-
-  def level_order(root=@root)
+  def level_order(root = @root)
     node_queue = [root]
     values = []
     until node_queue.empty?
       node = node_queue.shift
-      node_queue << node.left if not node.left.nil?
-      node_queue << node.right if not node.right.nil?
+      node_queue << node.left unless node.left.nil?
+      node_queue << node.right unless node.right.nil?
       block_given? ? yield(node) : values << node.data
     end
     block_given? ? nil : values
   end
 
-  def inorder(root=@root, values=[])
+  def inorder(root = @root, values = [])
     return if root.nil?
+
     inorder(root.left, values)
     values << root.data
     inorder(root.right, values)
     values
   end
 
-  def preorder (root=@root, values=[])
+  def preorder(root = @root, values = [])
     return if root.nil?
+
     values << root.data
     preorder(root.left, values)
     preorder(root.right, values)
     values
   end
 
-  def postorder (root=@root, values=[])
+  def postorder(root = @root, values = [])
     return if root.nil?
+
     postorder(root.left, values)
     postorder(root.right, values)
     values << root.data
@@ -152,5 +150,3 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 end
-
-Tree.new(arr).pretty_print
