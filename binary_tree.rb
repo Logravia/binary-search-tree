@@ -15,7 +15,8 @@ class Tree
   end
 
   def build_nodes(arr)
-    return Node.new(arr.first) if arr.size < 2
+    return nil if arr.empty?
+    return Node.new(arr.first) if arr.size == 1
 
     mid_point = arr.size / 2
     mid_node = Node.new(arr[mid_point])
