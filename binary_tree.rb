@@ -162,6 +162,21 @@ class Tree
     nil
   end
 
+  def balanced?
+    level_order do |node|
+      return false if not node_balanced?(node)
+    end
+    true
+  end
+
+  def node_balanced?(root=@root)
+    l_height = height(root.left)
+    r_height = height(root.right)
+    diff = (l_height.abs - r_height.abs).abs
+    is_balanced = diff <= 1
+    is_balanced
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
