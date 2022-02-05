@@ -122,6 +122,30 @@ class Tree
     block_given? ? nil : values
   end
 
+  def inorder(root=@root, values=[])
+    return if root.nil?
+    inorder(root.left, values)
+    values << root.data
+    inorder(root.right, values)
+    values
+  end
+
+  def preorder (root=@root, values=[])
+    return if root.nil?
+    values << root.data
+    preorder(root.left, values)
+    preorder(root.right, values)
+    values
+  end
+
+  def postorder (root=@root, values=[])
+    return if root.nil?
+    postorder(root.left, values)
+    postorder(root.right, values)
+    values << root.data
+    values
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
