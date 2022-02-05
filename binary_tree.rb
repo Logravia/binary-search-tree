@@ -87,6 +87,29 @@ class Tree
     return prev_node, cur_node
   end
 
+  def remove_node(to_remove, prev_node)
+    if to_remove.leaf?
+      prev_node.left == to_remove ? prev_node.left = nil : prev_node.right = nil
+      to_remove
+    elsif to_remove.single_child?
+      child = to_remove.the_child
+      prev_node.left == to_remove ? prev_node.left = child : prev_node.right = child
+      to_remove
+    else
+      parent, min_bigger_node = min_largest(to_remove)
+      to_remove.data = min_bigger_node.data
+      remove_node(min_bigger_node, parent)
+    end
+  end
+
+  def remove(val)
+    to_remove, parent = find_node(val)
+    return nil if to_remove.nil?
+    remove_node(to_remove, parent)
+    to_remove
+  end
+
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
