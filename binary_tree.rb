@@ -75,6 +75,18 @@ class Tree
       nil
     end
   end
+
+  def min_largest(root)
+    return nil if root.right.nil?
+    prev_node = root
+    cur_node = root.right
+    until cur_node.leaf?
+      prev_node = cur_node
+      cur_node = cur_node.left
+    end
+    return prev_node, cur_node
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
