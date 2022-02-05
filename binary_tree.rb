@@ -51,6 +51,30 @@ class Tree
     end
 
   end
+
+  def find_node(val)
+
+    prev_node = @root
+    cur_node = @root
+    val = Node.new(val)
+
+    until cur_node.leaf?
+      return cur_node, prev_node if cur_node == val
+      if val < cur_node
+        prev_node = cur_node
+        cur_node = cur_node.left
+      else
+        prev_node = cur_node
+        cur_node = cur_node.right
+      end
+    end
+
+    if cur_node == val
+      return cur_node, prev_node
+    else
+      nil
+    end
+  end
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
