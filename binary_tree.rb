@@ -26,6 +26,31 @@ class Tree
     mid_node
   end
 
+  def insert(val)
+    prev_node = @root
+    cur_node = @root
+    new_node = Node.new(val)
+    loop do
+      if new_node < cur_node
+        prev_node = cur_node
+        cur_node = cur_node.left
+      else
+        prev_node = cur_node
+        cur_node = cur_node.right
+      end
+
+      if cur_node.nil?
+       if new_node < prev_node
+         prev_node.left = new_node
+         break
+       else
+         prev_node.right = new_node
+         break
+       end
+      end
+    end
+
+  end
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
